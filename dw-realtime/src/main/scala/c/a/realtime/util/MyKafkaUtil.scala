@@ -1,9 +1,9 @@
 package c.a.realtime.util
 
+import org.apache.kafka.common.serialization.StringDeserializer
 import java.util.Properties
 
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.streaming.kafka010.{ConsumerStrategies, KafkaUtils, LocationStrategies}

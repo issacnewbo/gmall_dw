@@ -18,7 +18,7 @@ import scala.collection.mutable.ListBuffer
 
 object SaleApp {
     def main(args: Array[String]): Unit = {
-        val conf: SparkConf = new SparkConf().setAppName("SaleApp").setMaster("local[*]")
+        val conf: SparkConf = new SparkConf().setAppName("SaleApp").setMaster("local[3]")
         val ssc: StreamingContext = new StreamingContext(conf, Seconds(5))
 
         val inputOrderDStream: InputDStream[ConsumerRecord[String, String]] = MyKafkaUtil.getKafkaStream(GmallConstants.KAFKA_TOPIC_NEW_ORDER, ssc)
@@ -95,6 +95,7 @@ object SaleApp {
                     val orderDetailKey: String = "orderDetail:" + orderId
                     val orderDetailJson: String = Serialization.write(orderDetail)
                     jedis.sadd(orderDetailKey, orderDetailJson)
+                    jedis.expire(orderDetailKey, 10 * 60)
                 }
             }
             jedis.close()
@@ -137,6 +138,7 @@ object SaleApp {
         saleDetailWithUserInfoDStream.foreachRDD(rdd => {
             rdd.foreachPartition(saleDetailIter => {
                 val saleDetailWithIdList: List[(String, SaleDetail)] = saleDetailIter.map(saleDetail => {
+                    println(saleDetail)
                     (saleDetail.order_detail_id, saleDetail)
                 }).toList
                 MyEsUtil.insertBulk(GmallConstants.ES_INDEX_SALE_DETAIL, GmallConstants.ES_DEFAULT_TYPE, saleDetailWithIdList)

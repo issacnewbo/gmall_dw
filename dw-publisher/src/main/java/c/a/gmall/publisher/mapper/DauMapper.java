@@ -1,4 +1,4 @@
-package com.atguigu.gmall0513.publisher.mapper;
+package c.a.gmall.publisher.mapper;
 
 import java.util.List;
 import java.util.Map;

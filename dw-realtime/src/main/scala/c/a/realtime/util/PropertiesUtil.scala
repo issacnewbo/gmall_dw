@@ -11,9 +11,9 @@ object PropertiesUtil {
         println(properties.getProperty("kafka.broker.list"))
     }
 
-    def load(propertieName:String): Properties ={
-        val prop=new Properties();
-        prop.load(new InputStreamReader(Thread.currentThread().getContextClassLoader.getResourceAsStream(propertieName) , "UTF-8"))
+    def load(propertieName: String): Properties = {
+        val prop: Properties = new Properties()
+        prop.load(new InputStreamReader(Thread.currentThread().getContextClassLoader.getResourceAsStream(propertieName), "UTF-8"))
         prop
     }
 
